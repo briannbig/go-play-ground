@@ -20,6 +20,7 @@ func main() {
 	mux.HandleFunc("/", getHello)
 	mux.HandleFunc("/greet", greet)
 	mux.HandleFunc("/hi", sayHi)
+	mux.HandleFunc("/form", handleFormData)
 
 	ctx, cancelCtx := context.WithCancel(context.Background())
 
@@ -78,5 +79,24 @@ func sayHi(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s --- request body: \n %s\n", ctx.Value(keyServerAddr), body)
 
 	io.WriteString(w, fmt.Sprintf("Hi %s", body))
+
+}
+
+func handleFormData(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	fmt.Printf("%s: got /form request\n", ctx.Value(keyServerAddr))
+
+	name := r.PostFormValue("name")
+	email := r.PostFormValue("email")
+
+	if name == "" {
+		name = "John"
+	}
+	if email == "" {
+		email = "john@xyz.com"
+	}
+
+	io.WriteString(w, fmt.Sprintf("\nName: %s\nEmail: %s", name, email))
 
 }
