@@ -21,7 +21,7 @@ func main() {
 
 	ctx, cancelCtx := context.WithCancel(context.Background())
 
-	serverOne := &http.Server{
+	server := &http.Server{
 		Addr:    ":3333",
 		Handler: mux,
 		BaseContext: func(l net.Listener) context.Context {
@@ -30,31 +30,12 @@ func main() {
 		},
 	}
 
-	serverTwo := &http.Server{
-		Addr:    ":4444",
-		Handler: mux,
-		BaseContext: func(l net.Listener) context.Context {
-			ctx = context.WithValue(ctx, keyServerAddr, l.Addr().String())
-			return ctx
-		},
-	}
-
 	go func() {
-		err := serverOne.ListenAndServe()
+		err := server.ListenAndServe()
 		if errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("server one closed\n")
+			fmt.Printf("server closed\n")
 		} else if err != nil {
 			fmt.Printf("error listening for server one: %s\n", err)
-		}
-		cancelCtx()
-	}()
-
-	go func() {
-		err := serverTwo.ListenAndServe()
-		if errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("server two closed\n")
-		} else if err != nil {
-			fmt.Printf("error listening for server two: %s\n", err)
 		}
 		cancelCtx()
 	}()
@@ -73,6 +54,12 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 
 func greet(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	fmt.Printf("%s got /greet request\n", ctx.Value(keyServerAddr))
-	io.WriteString(w, "Hello user")
+	hasName := r.URL.Query().Has("name")
+	var name string = "user"
+	if hasName {
+		name = r.URL.Query().Get("name")
+	}
+	fmt.Printf("%s got /greet request from %s\n", ctx.Value(keyServerAddr), name)
+	greeting := fmt.Sprintf("Hello %s", name)
+	io.WriteString(w, greeting)
 }
