@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net"
 	"net/http"
 )
@@ -18,6 +19,7 @@ func main() {
 
 	mux.HandleFunc("/", getHello)
 	mux.HandleFunc("/greet", greet)
+	mux.HandleFunc("/hi", sayHi)
 
 	ctx, cancelCtx := context.WithCancel(context.Background())
 
@@ -62,4 +64,19 @@ func greet(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s got /greet request from %s\n", ctx.Value(keyServerAddr), name)
 	greeting := fmt.Sprintf("Hello %s", name)
 	io.WriteString(w, greeting)
+}
+
+func sayHi(w http.ResponseWriter, r *http.Request) {
+
+	ctx := r.Context()
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Printf("Could not read body: %s\n", err)
+	}
+	fmt.Printf("%s --- request body: \n %s\n", ctx.Value(keyServerAddr), body)
+
+	io.WriteString(w, fmt.Sprintf("Hi %s", body))
+
 }
