@@ -9,10 +9,14 @@ import (
 )
 
 func main() {
-	fmt.Println("Here we go!")
-	http.HandleFunc("/", getHello)
+	fmt.Println("Here we go! a simple http server in golang")
 
-	err := http.ListenAndServe(":3333", nil)
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", getHello)
+	mux.HandleFunc("/greet", greet)
+
+	err := http.ListenAndServe(":3333", mux)
 
 	if errors.Is(err, http.ErrServerClosed) {
 		fmt.Println("Server closed")
@@ -27,4 +31,8 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("request body: %d\n", r.Body)
 	io.WriteString(w, "Here we go confirmed!")
 
+}
+
+func greet(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "Hello user")
 }
