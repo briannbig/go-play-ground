@@ -5,14 +5,27 @@ import (
 	"fmt"
 )
 
+const keyUsername = "username"
+
 func main() {
 	ctx := context.Background()
 
-	doSomething(ctx)
+	ctx = context.WithValue(ctx, keyUsername, "jdoe")
+	printUsername(ctx)
 }
 
-func doSomething(ctx context.Context) {
+func printUsername(ctx context.Context) {
 
-	fmt.Println("Doing something")
+	fmt.Printf("initial %s's value is %s\n><><><><><><cleaning username...\n", keyUsername, ctx.Value(keyUsername))
+
+	cleanUsername(ctx)
+
+	fmt.Printf("Cleaned %s's value is %s\n", keyUsername, ctx.Value(keyUsername))
+
+}
+
+func cleanUsername(ctx context.Context) {
+	ctx = context.WithValue(ctx, keyUsername, fmt.Sprintf("~%s", ctx.Value(keyUsername)))
+	fmt.Printf("cleaning %s's value to %s\n", keyUsername, ctx.Value(keyUsername))
 
 }
