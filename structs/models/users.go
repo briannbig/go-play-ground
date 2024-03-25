@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	UserName      string    `json:"name"`
-	Password      string    `json:"-"` // let serializer ignore this field
+	Password      string    `json:"-"`                       // let serializer ignore this field
 	PreferredFish []string  `json:"preferredFish,omitempty"` // let serializer ignore if empty
 	CreatedAt     time.Time `json:"createdAt"`
 }
@@ -22,4 +22,8 @@ func (u *User) String() string {
 		log.Println(err)
 	}
 	return string(out)
+}
+
+func (u *User) AddFish(fish string) {
+	u.PreferredFish = append(u.PreferredFish, fish)
 }

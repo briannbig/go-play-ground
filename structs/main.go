@@ -14,4 +14,7 @@ func main() {
 	}
 
 	services.Greet(user)
+
+	services.AddFish(user, "Tilapia")
+	services.AddFish(user, "Nile Perch")
 }
