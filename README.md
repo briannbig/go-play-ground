@@ -52,3 +52,20 @@ Format specifiers
 | `%q`             | Double-quoted string safely escaped with Go syntax |
 | `%p`             | Pointer (displays the base 16 representation of the value) |
 
+---
+Working with Strings package
+---
+
+| Method      | Description                               | Signature                            |
+|-------------|-------------------------------------------|--------------------------------------|
+| Contains    | Reports whether substr is within s.       | `Contains(s, substr string) bool`    |
+| Count       | Counts the number of non-overlapping instances of substr in s. | `Count(s, substr string) int`        |
+| Index       | Returns the index of the first instance of substr in s, or -1 if substr is not present. | `Index(s, substr string) int`        |
+| LastIndex   | Returns the index of the last instance of substr in s, or -1 if substr is not present. | `LastIndex(s, substr string) int`    |
+| Replace     | Returns a copy of s with the first n non-overlapping instances of old replaced by new. | `Replace(s, old, new string, n int) string` |
+| Split       | Splits s into substrings separated by sep and returns a slice of the substrings. | `Split(s, sep string) []string`      |
+| ToLower     | Returns a copy of the string s with all Unicode letters mapped to their lower case. | `ToLower(s string) string`           |
+| ToUpper     | Returns a copy of the string s with all Unicode letters mapped to their upper case. | `ToUpper(s string) string`           |
+| Trim        | Returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed. | `Trim(s string, cutset string) string` |
+| TrimLeft    | Returns a slice of the string s with all leading Unicode code points contained in cutset removed. | `TrimLeft(s string, cutset string) string` |
+| TrimRight   | Returns a slice of the string s with all trailing Unicode code points contained in cutset removed. | `TrimRight(s string, cutset string) string` |
