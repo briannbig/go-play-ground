@@ -9,11 +9,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type NoteController interface {
 	GetAll(w http.ResponseWriter, r *http.Request)
 	Save(w http.ResponseWriter, r *http.Request)
+	GetNoteById(w http.ResponseWriter, r *http.Request)
+	DeleteNote(w http.ResponseWriter, r *http.Request)
 }
 
 type controller struct {
@@ -54,6 +57,56 @@ func (c controller) Save(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := c.service.Save(model.New(request.Title, request.Content))
+
+	io.WriteString(w, fmt.Sprintf("New notes size: %d\n", res))
+}
+
+func (c controller) GetNoteById(w http.ResponseWriter, r *http.Request) {
+	QUERY_STR_ID := "id"
+
+	hasId := r.URL.Query().Has(QUERY_STR_ID)
+
+	if !hasId {
+		fmt.Println("Id missing in request params")
+		io.WriteString(w, "id not specified in request params")
+		return
+	}
+
+	id := r.URL.Query().Get(QUERY_STR_ID)
+
+	id_, _ := strconv.Atoi(id)
+
+	note, err := c.service.GetNoteById(id_)
+	if err != nil {
+		io.WriteString(w, fmt.Sprintf("Error --- %s", err))
+		return
+	}
+
+	io.WriteString(w, note.String())
+
+}
+
+// DeleteNote implements NoteController.
+func (c controller) DeleteNote(w http.ResponseWriter, r *http.Request) {
+	QUERY_STR_ID := "id"
+
+	hasId := r.URL.Query().Has(QUERY_STR_ID)
+
+	if !hasId {
+		fmt.Println("Id missing in request params")
+		io.WriteString(w, "id not specified in request params")
+		return
+	}
+
+	id := r.URL.Query().Get(QUERY_STR_ID)
+
+	id_, _ := strconv.Atoi(id)
+
+	res, err := c.service.DeleteNote(id_)
+	if err != nil {
+		io.WriteString(w, fmt.Sprintf("Error --- %s", err))
+		return
+	}
 
 	io.WriteString(w, fmt.Sprintf("New notes size: %d\n", res))
 }

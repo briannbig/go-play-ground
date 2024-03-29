@@ -22,6 +22,8 @@ func main() {
 
 	http.HandleFunc("/notes", noteController.GetAll)
 	http.HandleFunc("/notes/add", noteController.Save)
+	http.HandleFunc("/notes/", noteController.GetNoteById)
+	http.HandleFunc("/notes/delete", noteController.DeleteNote)
 
 	err := http.ListenAndServe(":8080", nil)
 
