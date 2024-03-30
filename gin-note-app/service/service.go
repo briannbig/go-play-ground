@@ -7,7 +7,7 @@ import (
 
 type NoteService interface {
 	GetAll() []model.Note
-	Save(note model.Note) int
+	Save(note model.Note) model.Note
 	GetNoteById(id int) (model.Note, error)
 	DeleteNote(id int) (int, error)
 }
@@ -28,10 +28,10 @@ func (s *service) GetAll() []model.Note {
 	return s.notes
 }
 
-func (s *service) Save(note model.Note) int {
+func (s *service) Save(note model.Note) model.Note {
 	s.notes = append(s.notes, note)
 
-	return len(s.notes)
+	return note
 }
 
 func (s *service) GetNoteById(id int) (model.Note, error) {
