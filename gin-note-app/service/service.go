@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"gin-note-app/data"
 	"gin-note-app/model"
 )
 
@@ -13,7 +14,8 @@ type NoteService interface {
 }
 
 type service struct {
-	notes []model.Note
+	notes    []model.Note
+	DataBase data.DataBase
 }
 
 func New() NoteService {
@@ -21,7 +23,7 @@ func New() NoteService {
 		model.New("Hello", "Hello world"),
 		model.New("Happiness", "Happiness is coding in golang! You should find this happiness too"),
 	}
-	return &service{notes: notes}
+	return &service{notes: notes, DataBase: data.New()}
 }
 
 func (s *service) GetAll() []model.Note {
