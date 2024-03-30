@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
@@ -29,9 +30,17 @@ func main() {
 		SumIntsOrFloats[string, float64](floats))
 
 	/// testing my implementation
-	fmt.Printf("Generic square areas: %v and % v \n",
-		calculateSquareArea(4),
-		calculateSquareArea(4.54))
+	fmt.Printf("Generic square areas: %v and %v \n",
+		calculateSquareArea[int, int](4),
+		calculateSquareArea[float64, float64](4.54))
+
+	fmt.Printf("Generic circle areas: %v and %v \n",
+		calculateCircleArea[int](7),
+		calculateCircleArea[float64](7.00))
+
+	fmt.Printf("Generic Rectangle areas: %v and %v \n",
+		calculateRectangleArea(7, 3),
+		calculateRectangleArea(7.20, 3))
 
 }
 
@@ -66,8 +75,22 @@ func SumIntsOrFloats[K comparable, V int64 | float64](m map[K]V) V {
 	return s
 }
 
-// my generic implementation function
-func calculateSquareArea[W int | float64](width W) W {
-	return width * width
+// my generic implementation function calculate square area
+func calculateSquareArea[W int | float64, A int | float64](width W) A {
+	return A(width * width)
+}
 
+// my generic implementation function calculate circle area
+func calculateCircleArea[Radius int | float64, Area float64](radius Radius) Area {
+	return Area(math.Pi) * Area(radius*radius)
+}
+
+// declaring type constraints
+type Number interface {
+	int | float64 | float32
+}
+
+// utilizing type constraints
+func calculateRectangleArea[Length Number, Width Number, Area float64](length Length, width Width) Area {
+	return Area(length) * Area(width)
 }
