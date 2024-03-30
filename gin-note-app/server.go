@@ -2,7 +2,10 @@ package main
 
 import (
 	"gin-note-app/controllers"
+	"gin-note-app/middleware"
 	"gin-note-app/service"
+	"io"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,8 +15,19 @@ var (
 	noteController controllers.NoteController = controllers.New(noteService)
 )
 
+func setUpLogger() {
+	f, _ := os.Create("app-server.log")
+
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+}
+
 func main() {
+
 	server := gin.Default()
+
+	setUpLogger()
+
+	server.Use(gin.Recovery(), middleware.Logger())
 
 	server.GET("/welcome", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{"message": "note app running with gin"})
