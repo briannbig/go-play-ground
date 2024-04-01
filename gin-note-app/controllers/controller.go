@@ -32,12 +32,12 @@ func (c controller) DeleteNote(ctx *gin.Context) string {
 
 	id, _ := strconv.Atoi(id_)
 
-	res, err := c.service.DeleteNote(id)
+	_, err := c.service.DeleteNote(id)
 	if err != nil {
 		return fmt.Sprint(err)
 	}
 
-	return fmt.Sprintf("Note deleted, new notes counnt %d", res)
+	return "Note deleted"
 }
 
 // GetAll implements NoteController.

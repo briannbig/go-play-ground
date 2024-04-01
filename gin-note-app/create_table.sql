@@ -5,8 +5,7 @@ DROP TABLE IF EXISTS notes;
 CREATE TABLE notes(
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     title VARCHAR(255),
-    content TEXT,
-    time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    content TEXT
 );
 INSERT INTO notes (title, content)
 VALUES (
