@@ -9,3 +9,8 @@ updates:
     directory: "/gin-note-app/" 
     schedule:
       interval: "daily"
+ 
+  - package-ecosystem: "gomod" 
+    directory: "/gorm-concept/" 
+    schedule:
+      interval: "daily"
