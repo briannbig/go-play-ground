@@ -3,7 +3,7 @@ module gorm-concept
 go 1.22.1
 
 require (
-	gorm.io/driver/sqlite v1.5.5
+	gorm.io/driver/sqlite v1.5.6
 	gorm.io/gorm v1.25.10
 )
 
